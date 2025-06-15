@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Lirik CLBK By RijalGanzz</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+      background-size: 50px 50px;
+      background-position: 0 0, 25px 25px;
+      color: #00ffff;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 50px 20px 100px;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    audio {
+      margin-bottom: 20px;
+    }
+
+    .lirik {
+      font-size: 1.4em;
+      margin: 10px 0;
+      min-height: 1.4em;
+      white-space: pre-wrap;
+      text-shadow: 0 0 6px #00ffff;
+    }
+
+    button, .wa-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #00ffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 255, 255, 0.5);
+    }
+
+    button:hover, .wa-button:hover {
+      background-color: #00dddd;
+    }
+
+    .wa-button {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lirik CLBK By RijalGanzz</h1>
+
+  <audio id="audio" controls>
+    <source src="https://files.catbox.moe/wccq5y.mp3" type="audio/mp3">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
+  <button id="resetBtn">🔁 Ulangi Lirik & Lagu</button>
+
+  <div id="lyrics-container">
+    <div class="lirik" id="line1"></div>
+    <div class="lirik" id="line2"></div>
+    <div class="lirik" id="line3"></div>
+    <div class="lirik" id="line4"></div>
+    <div class="lirik" id="line5"></div>
+    <div class="lirik" id="line6"></div>
+    <div class="lirik" id="line7"></div>
+    <div class="lirik" id="line8"></div>
+    <div class="lirik" id="line9"></div>
+    <div class="lirik" id="line10"></div>
+    <div class="lirik" id="line11"></div>
+    <div class="lirik" id="line12"></div>
+    <div class="lirik" id="line13"></div>
+    <div class="lirik" id="line14"></div>
+    <div class="lirik" id="line15"></div>
+    <div class="lirik" id="line16"></div>
+  </div>
+
+  <a href="https://wa.me/34604216991" class="wa-button" target="_blank">💬 Hubungi RijalGanzz di WhatsApp</a>
+
+  <script>
+    const lyrics = [
+      "Semua jadi masa lalu",
+      "Cerita terindah antara kau dan aku",
+      "Mau tak mau ku harus menolakmu",
+      "Kar'na ku sudah ada pengganti dirimu",
+      "Aku yang sekarang bukanlah yang dulu",
+      "Maafkan mantan aku tak tau",
+      "Cintaku padamu bersemi kembali",
+      "Maukah kau menjadi pacarku lagi",
+      "Cinta bikin sakit bikin aku luka",
+      "Lama-lama bisa buat aku gila",
+      "Jangan coba-coba kau bermain cinta",
+      "Nanti dirimu bisa terluka",
+      "Kalau cinta bilang cinta",
+      "Kalau benci bilang benci",
+      "Jangan cinta bilang benci",
+      "Hanya kar'na kamu gengsi"
+    ];
+
+    const delays = [
+      600, 600, 600, 900, 1100, 1100,
+      1000, 1000, 1000, 1000, 1000,
+      1000, 1000, 1000, 1000, 1000
+    ];
+
+    const speedPerChar = 40;
+    let timeouts = [];
+    let started = false;
+
+    function typeText(elementId, text, speed = speedPerChar, callback) {
+      const el = document.getElementById(elementId);
+      let i = 0;
+      function typeChar() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+          timeouts.push(setTimeout(typeChar, speed));
+        } else if (callback) {
+          callback();
+        }
+      }
+      typeChar();
+    }
+
+    function startTypingLyrics() {
+      let totalDelay = 0;
+      lyrics.forEach((line, index) => {
+        totalDelay += delays[index] || 1000;
+        timeouts.push(setTimeout(() => {
+          typeText(`line${index + 1}`, line);
+        }, totalDelay));
+        totalDelay += line.length * speedPerChar;
+      });
+    }
+
+    function clearLyrics() {
+      for (let i = 1; i <= lyrics.length; i++) {
+        document.getElementById(`line${i}`).textContent = '';
+      }
+      timeouts.forEach(clearTimeout);
+      timeouts = [];
+      started = false;
+    }
+
+    const audio = document.getElementById('audio');
+    const resetBtn = document.getElementById('resetBtn');
+
+    audio.addEventListener('play', () => {
+      if (!started) {
+        clearLyrics();
+        startTypingLyrics();
+        started = true;
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      clearLyrics();
+      audio.currentTime = 0;
+      audio.play();
+    });
+  </script>
+</body>
+</html>
